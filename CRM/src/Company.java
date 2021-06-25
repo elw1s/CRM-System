@@ -12,7 +12,7 @@ public class Company extends DatabaseCRM {
     private static List<Admin> admin;
     private static List<BusinessDeveloper> businessDev;
     private static SkipList<Customer> customer;
-    private static BinarySearchTree<Product> products;
+    private static AVLTree<Product> products;
     private static Queue<UserInformationSystem> uis;
 
     public Company(String companyName) throws SQLException, ClassNotFoundException {
@@ -21,7 +21,7 @@ public class Company extends DatabaseCRM {
         QuickSort.sort(admin);
         businessDev = new ArrayList<>();
         customer = new SkipList<>();
-        products = new BinarySearchTree<>();
+        products = new AVLTree<>();
         uis = new LinkedList<>();
         this.companyName = companyName;
         setFields();
@@ -110,7 +110,7 @@ public class Company extends DatabaseCRM {
      * Returns the products
      * @return Returns the all products in BinarySearchTree
      */
-    public BinarySearchTree<Product> getAllProducts() {
+    public AVLTree<Product> getAllProducts() {
         return products;
     }
 
@@ -145,7 +145,7 @@ public class Company extends DatabaseCRM {
      * @return Admin object with the given ID
      * @throws NoSuchElementException
      */
-    public Admin getAdmin(String ID) throws NoSuchElementException {
+    public static Admin getAdmin(String ID) throws NoSuchElementException {
         for (Admin value : admin) {
             if (value.getID().equals(ID)) return value;
         }
@@ -159,7 +159,7 @@ public class Company extends DatabaseCRM {
      * @return BusinessDev object with the given ID
      * @throws NoSuchElementException
      */
-    public BusinessDeveloper getBusinessDev(String ID) throws NoSuchElementException {
+    public static BusinessDeveloper getBusinessDev(String ID) throws NoSuchElementException {
         for (BusinessDeveloper businessDeveloper : businessDev) {
             if (businessDeveloper.getID().equals(ID)) return businessDeveloper;
         }
@@ -173,7 +173,7 @@ public class Company extends DatabaseCRM {
      * @return Customer object with the given ID
      * @throws NoSuchElementException
      */
-    public Customer getCustomer(String ID) throws NoSuchElementException {
+    public static Customer getCustomer(String ID) throws NoSuchElementException {
         SkipList.SkipListIter iter = (SkipList.SkipListIter) customer.iterator();
         while (iter.hasNext()) {
             Customer temp = (Customer) iter.next();
@@ -228,10 +228,9 @@ public class Company extends DatabaseCRM {
      * Adds new product into the Database and also into the list
      * @param product
      */
-    public static void addProduct(Product product){
+    public static void addProduct(Product product) throws SQLException {
         products.add(product);
-        //DatabaseCRM.ProductsDB.
-        //Add fonksiyonu yok
+        DatabaseCRM.ProductsDB.createProduct(product);
     }
 
     /***
@@ -240,7 +239,7 @@ public class Company extends DatabaseCRM {
      * @throws SQLException
      */
     public static void removeProduct(String ID) throws SQLException {
-        BinarySearchTree.BST_Iterator iter = products.iterator();
+        AVLTree.Iterator iter = products.iterator();
         while(iter.hasNext()){
             Product product = (Product) iter.next();
             if(product.getID().equals(ID)){
@@ -259,7 +258,7 @@ public class Company extends DatabaseCRM {
      */
     public static void updateProduct(Product product) throws SQLException {
         DatabaseCRM.ProductsDB.updateProductName(product.getID(), product.getName());
-        BinarySearchTree.BST_Iterator iter = products.iterator();
+        AVLTree.Iterator iter = products.iterator();
         while(iter.hasNext()){
             Product item = (Product) iter.next();
             if(item.getID().equals(product.getID())){
@@ -275,7 +274,7 @@ public class Company extends DatabaseCRM {
      * @return Product if it exists, otherwise null
      */
     public static Product getProduct(String ID){
-        BinarySearchTree.BST_Iterator iter = products.iterator();
+        AVLTree.Iterator iter = products.iterator();
 
         while(iter.hasNext()){
             Product item = (Product) iter.next();
@@ -284,6 +283,16 @@ public class Company extends DatabaseCRM {
             }
         }
         return null;
+    }
+
+    public static int numberOfProducts(){
+        AVLTree.Iterator iter = products.iterator();
+        int count = 0;
+        while(iter.hasNext()){
+            count++;
+            iter.next();
+        }
+        return count;
     }
 
     /***
@@ -395,9 +404,9 @@ public class Company extends DatabaseCRM {
      * Adds new message into the uis field
      * @param item
      */
-    protected static void addNewMessage(UserInformationSystem item){
+    protected static void addNewMessage(UserInformationSystem item) throws SQLException {
         uis.add(item);
-        //Database içerisine message kaydetme yok
+        DatabaseCRM.MessagesDB.createMessageDB(item.getUser(),item.getMessage());
     }
 
     /***

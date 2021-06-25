@@ -1,16 +1,20 @@
 package src;
 
+import DataStructures.Edge;
+import DataStructures.GenericGraph.src.GenericGraph;
+import DataStructures.Graph;
+import DataStructures.ListGraph;
 import DataStructures.SkipList;
 import database.DatabaseCRM;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class BusinessDeveloper extends User {
     private PriorityQueue<Schedule> schedules;
     private PriorityQueue<Schedule> temp;
+    private GenericGraph<String> productGraph;
     private int ctr=0;
 
 
@@ -18,6 +22,22 @@ public class BusinessDeveloper extends User {
         super(name, surName, ID, password);
         schedules = new PriorityQueue<>();
         temp = new PriorityQueue<>();
+        productGraph = new GenericGraph<String>();
+        fillGraph();
+    }
+
+    private void fillGraph(){
+        productGraph.addEdge("Computer","Keyboard");
+        productGraph.addEdge("Computer","Mouse");
+        productGraph.addEdge("Camera","Cell Phones");
+        productGraph.addEdge("Headphones","Cell Phones");
+        productGraph.addEdge("Home Audio","Headphones");
+        productGraph.addEdge("Office Electronics","Mouse");
+        productGraph.addEdge("Television","Video");
+        productGraph.addEdge("Video Game","Computer");
+        productGraph.addEdge("Video Projectors","Television");
+        productGraph.addEdge("Service Plans","Television");
+
     }
 
     /***
@@ -173,7 +193,6 @@ public class BusinessDeveloper extends User {
         schedules=temp2;
     }
 
-
     /***
      * Remove product using ID
      * @param ID
@@ -201,7 +220,23 @@ public class BusinessDeveloper extends User {
         return cust;
     }
 
-    public void manageOffering(){}
+    /***
+     * Offers recommended categories of the given input
+     */
+    public void manageOffering(){
+        System.out.println("Enter the customer's favorite product's name: ");
+        Scanner scanner = new Scanner(System.in);
+        String product_name = scanner.nextLine();
+        List<String> list = productGraph.getEdges(product_name);
+        System.out.println("You can offer these categories: ");
+        for(String edge : list)
+            System.out.println(edge);
+        System.out.println("\n\n");
+    }
 
-    public void addProduct(Product product){    }
+
+    public void addProduct(Product product) throws SQLException {
+        Company.addProduct(product);
+
+    }
 }

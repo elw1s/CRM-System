@@ -1,6 +1,6 @@
 package database;
 
-import DataStructures.BinarySearchTree;
+import DataStructures.AVLTree;
 import DataStructures.SkipList;
 import src.*;
 
@@ -168,7 +168,7 @@ public class DatabaseCRM {
         /**
          * create a user in database
          *
-         * @param user created customer object
+         * @param customer
          * @throws SQLException throws a SQLException
          */
         public static void createUserInDB(User customer) throws SQLException {
@@ -563,7 +563,7 @@ public class DatabaseCRM {
             }
         }
 	    
-	public static boolean createProduct(Product product){
+	public static boolean createProduct(Product product) throws SQLException {
 		
 		PreparedStatement statement = connection.prepareStatement("INSERT INTO cecvsYhcHb.products values(?,?,?);");
 		statement.setString(1, product.getID());
@@ -615,10 +615,10 @@ public class DatabaseCRM {
             return list;
         }
 
-        public static BinarySearchTree<Product> getAllProductsFromDB() throws SQLException {
+        public static AVLTree<Product> getAllProductsFromDB() throws SQLException {
             String query = "SELECT * FROM products";
 
-            BinarySearchTree<Product> productBinarySearchTree = new BinarySearchTree<>();
+            AVLTree<Product> productBinarySearchTree = new AVLTree<>();
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {

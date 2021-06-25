@@ -1,3 +1,7 @@
+package DataStructures.GenericGraph.src;
+
+import DataStructures.GenericGraph.src.GenericGraph;
+
 import java.util.Iterator;
 
 public class test {

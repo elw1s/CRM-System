@@ -99,11 +99,11 @@ public class CRMSystem{
      * @throws Exception the exception
      */
     public void showMenu() throws Exception {
-        System.out.println(ANSI_BLUE +"Welcome To CRM System" + ANSI_RESET);
-        Scanner input = new Scanner(System.in);
-        String id = "null";
-        User user = null;
         while(true){
+            System.out.println(ANSI_BLUE +"Welcome To CRM System" + ANSI_RESET);
+            Scanner input = new Scanner(System.in);
+            String id = "null";
+            User user = null;
             System.out.println("1- Login");
             System.out.println("2- Sign up");
             int choice = input.nextInt();
@@ -130,7 +130,7 @@ public class CRMSystem{
                     }
                     break;
                 case 2:
-                    singUp();
+                    signUp();
                     break;
                 default:
                     System.err.println("Invalid selection.");
@@ -207,10 +207,8 @@ public class CRMSystem{
                     name = input.next();
                     System.out.print("Enter Id : ");
                     ID = input.next();
-                    System.out.print("Enter ID : ");
+                    System.out.print("Enter Category : ");
                     String category = input.next();
-                    System.out.print("Enter Password : ");
-                    password = input.next();
                     admin.addProduct(new Product(name,ID,category));
                     break;
                 case 6:
@@ -311,6 +309,7 @@ public class CRMSystem{
             System.out.println("9 - Set Customer Surname ");
             System.out.println("10 - Set Customer Email");
             System.out.println("11 - Set Customer Phone Number");
+            System.out.println("12 - Offer Recommended Categories");
             System.out.println("0 - Logout\n");
             System.out.println("-1 - Quit");
 
@@ -411,6 +410,9 @@ public class CRMSystem{
                     name = input.next();
                     busDev.setCustomerPhoneNumber(id, name);
                     break;
+                case 12:
+                    busDev.manageOffering();
+                    break;
                 case 0:
                     showMenu();
                     break;
@@ -506,7 +508,7 @@ public class CRMSystem{
      * @return true when the sign up operation is completed
      * @throws SQLException
      */
-    public boolean singUp() throws SQLException {
+    public boolean signUp() throws SQLException {
             Scanner input = new Scanner(System.in);
             String name,surName,id = "C1",password,email,phoneNum;
             Random rand = new Random();

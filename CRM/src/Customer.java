@@ -1,4 +1,5 @@
 package src;
+import DataStructures.AVLTree;
 import DataStructures.BinarySearchTree;
 import database.DatabaseCRM;
 
@@ -83,8 +84,8 @@ public class Customer extends User implements Comparable<Customer> {
      * @param ID
      * @return Product if it exists, otherwise null
      */
-    public Product findProduct(BinarySearchTree<Product> products, String ID) {
-        BinarySearchTree.BST_Iterator iter = products.iterator();
+    public Product findProduct(AVLTree<Product> products, String ID) {
+        AVLTree.Iterator iter = products.iterator();
         while(iter.hasNext()){
             Product product = (Product) iter.next();
             if(product.getID().equals(ID)){

@@ -1,3 +1,5 @@
+package DataStructures.GenericGraph.src;
+
 import java.util.*;
 
 public class GenericGraph<E> {
@@ -8,7 +10,7 @@ public class GenericGraph<E> {
     /**
      * Constructor
      */
-    GenericGraph(){
+    public GenericGraph(){
         map = new HashMap<>();
         directed = false;
     }
@@ -111,6 +113,10 @@ public class GenericGraph<E> {
      */
     public Iterator<E> edgeIterator(E source){
         return map.get(source).iterator();
+    }
+
+    public List<E> getEdges(E source){
+        return map.get(source);
     }
 
     public String toString()

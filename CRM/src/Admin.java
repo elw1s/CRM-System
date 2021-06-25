@@ -215,7 +215,6 @@ public class Admin extends User implements Comparable<Admin>{
      * @param phoneNumber
      */
 
-    // TODO: Bu fonksiyon şuan çalışmıyor çünkü Database içerisinde çağırılan fonksiyon telefon numarası kaydetmesi yapmıyor.
     public void setCustomerPhoneNumber(String userID, String phoneNumber) throws SQLException {
         if (phoneNumber == null || userID == null){
             System.out.println("Invalid ID or email!");
@@ -223,10 +222,6 @@ public class Admin extends User implements Comparable<Admin>{
         }
         if (userID.charAt(0) == 'C'){
             Customer temp = Company.getCustomer(userID);
-            /*if (temp == null){
-                System.out.println("Invalid ID!!");
-                return;
-            }*/
             temp.setPhoneNumber(phoneNumber);
             Company.updateUser(temp);
         }
@@ -246,7 +241,6 @@ public class Admin extends User implements Comparable<Admin>{
      * @return all products in the system
      */
     public BinarySearchTree<Product> getAllProducts() throws SQLException {
-        // BinarySearchTree<Product> allProducts = Company.getAllProducts();
         BinarySearchTree<Product> allProducts = DatabaseCRM.ProductsDB.getAllProductsFromDB();
         return allProducts;
     }
@@ -263,11 +257,6 @@ public class Admin extends User implements Comparable<Admin>{
             System.out.println("Invalid productId!");
             return null;
         }
-        /*Product temp = DatabaseCRM.ProductsDB.getProductFromDB(productId);
-        if (temp == null){
-            System.out.println("Product is not found!");
-            return null;
-        } */
         return Company.getProduct(productId);
     }
 
@@ -276,7 +265,7 @@ public class Admin extends User implements Comparable<Admin>{
      * Adds a product to the system
      * @param product
      */
-    public void addProduct(Product product){
+    public void addProduct(Product product) throws SQLException {
         if (product == null){
             System.out.println("Invalid");
             return;
