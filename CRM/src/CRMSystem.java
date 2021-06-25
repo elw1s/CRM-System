@@ -1,30 +1,65 @@
 package src;
 
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Scanner;
 
+/**
+ * The type Crm system.
+ */
 public class CRMSystem{
     /*Bu objeyi (company) kullanarak kullanıcılara, ürünlere erişebilirsiniz. Bu class bi nevi driver olacak.
      * User kendi yazacağı mainde bu classın objesini oluşturacak. Bütün işlemler bu class üzerinden gerçekleşecek.
      * */
 
+    /**
+     * The constant ANSI_RESET.
+     */
     public static final String ANSI_RESET = "\u001B[0m";
-    /** Ansi escape codes */
+    /**
+     * Ansi escape codes
+     */
     public static final String ANSI_RED = "\u001B[31m";
-    /** Ansi escape codes */
+    /**
+     * Ansi escape codes
+     */
     public static final String ANSI_GREEN = "\u001B[32m";
-    /** Ansi escape codes */
+    /**
+     * Ansi escape codes
+     */
     public static final String ANSI_YELLOW = "\u001B[33m";
-    /** Ansi escape codes */
+    /**
+     * Ansi escape codes
+     */
     public static final String ANSI_BLUE = "\u001B[34m";
 
+    /**
+     * The constant ANSI_PURPLE.
+     */
     public static final String ANSI_PURPLE = "\u001B[35m";
+    /**
+     * The Company.
+     */
     Company company;
 
+    /**
+     * Instantiates a new Crm system.
+     *
+     * @param company_name the company name
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public CRMSystem(String company_name) throws SQLException, ClassNotFoundException {
         company = new Company(company_name);
     }
 
+    /**
+     * Login user.
+     *
+     * @param userID the user id
+     * @return the user
+     */
     public User login(String userID){
         Scanner input = new Scanner(System.in);
         String password;
@@ -58,6 +93,13 @@ public class CRMSystem{
         }
         return null;
     }
+
+    /**
+     * Show menu.
+     *
+     *
+     * @throws Exception the exception
+     */
     public void showMenu() throws Exception {
         System.out.println(ANSI_BLUE +"Welcome To CRM System" + ANSI_RESET);
         Scanner input = new Scanner(System.in);
@@ -101,9 +143,9 @@ public class CRMSystem{
             System.out.println("9 - Remove Schedule");
             System.out.println("10 - Manage Customer Feedbacks");
             System.out.println("11 - View All Users");
-            System.out.println("12 - Find Product \n");
+            System.out.println("12 - Find Product \n\n");
             System.out.println("13 - Set User Name");
-            System.out.println("14 - Set User Surname \n");
+            System.out.println("14 - Set User Surname \n\n");
             System.out.println("0 - Logout");
             System.out.println("-1 - Quit");
 
@@ -153,8 +195,10 @@ public class CRMSystem{
                     name = input.next();
                     System.out.print("Enter Id : ");
                     ID = input.next();
-                    System.out.print("Enter Category : ");
+                    System.out.print("Enter ID : ");
                     String category = input.next();
+                    System.out.print("Enter Password : ");
+                    password = input.next();
                     admin.addProduct(new Product(name,ID,category));
                     break;
                 case 6:
@@ -163,17 +207,36 @@ public class CRMSystem{
                     id = input.next();
                     admin.removeProduct(id);
                     break;
+                // düzenlendi @murat
                 case 7:
                     System.out.println(ANSI_YELLOW + "Manage Schedule Page"+ANSI_RESET);
-                    admin.manageSchedule();
+                    admin.printsSchedule();
+                    System.out.println("Enter the process you want to edit(as integer): ");
+                    int num = input.nextInt();
+                    System.out.println("Enter new year value: ");
+                    int year = input.nextInt();
+                    admin.manageSchedule(num, year);
                     break;
+                // düzenlendi @murat
                 case 8:
                     System.out.println(ANSI_YELLOW + "Add Schedule Page"+ANSI_RESET);
-                    admin.addSchedule();
+                    System.out.println("Enter Process: ");
+                    String process = input.next();
+                    Date date = new Date();
+                    if (process != null){
+                        Schedule schedule = new Schedule(date, process);
+                        admin.addSchedule(schedule);
+                    }
+                    else
+                        System.out.println("Error!");
                     break;
+                // düzenlendi @murat
                 case 9:
                     System.out.println(ANSI_YELLOW + "Remove Schedule Page"+ANSI_RESET);
-                    admin.removeSchedule();
+                    admin.printsSchedule();
+                    System.out.println("Enter the process you want to delete (as integer): ");
+                    int num1 = input.nextInt();
+                    admin.removeSchedule(num1);
                     break;
                 case 10:
                     System.out.println(ANSI_YELLOW + "Manage Customer Feedbacks Page"+ANSI_RESET);
@@ -257,19 +320,41 @@ public class CRMSystem{
                     System.out.print("Enter ID : ");
                     id = input.next();
                     pro = Company.getProduct(id);
-                    busDev.removeProduct(pro);
+                    //busDev.removeProduct(pro);
                     break;
                 case 3:
                     System.out.println(ANSI_YELLOW + "Manage Schedule Page"+ANSI_RESET);
-                    busDev.manageSchedule();
+                    System.out.print("Enter Process : ");
+                    String p = input.next();
+                    System.out.print("Enter Day : ");
+                    String d = input.next();
+                    System.out.print("Enter Month : ");
+                    String m = input.next();
+                    System.out.print("Enter Year : ");
+                    String y = input.next();
+                    String dat = d + "//" + m + "//" + y;
+
+                    busDev.manageSchedule(dat,p);
                     break;
                 case 4:
                     System.out.println(ANSI_YELLOW + "Add Schedule Page"+ANSI_RESET);
-                    busDev.addSchedule();
+                    System.out.print("Enter Day : ");
+                    String day = input.next();
+                    System.out.print("Enter Month : ");
+                    String month = input.next();
+                    System.out.print("Enter Year : ");
+                    String year = input.next();
+                    String date = day + "//" + month + "//" + year;
+                    System.out.print("Enter Process : ");
+                    String proce = input.next();
+
+                    busDev.addSchedule(date, proce);
                     break;
                 case 5:
                     System.out.println(ANSI_YELLOW + "Remove Schedule Page"+ANSI_RESET);
-                    busDev.removeSchedule();
+                    System.out.print("Enter process : ");
+                    String process = input.next();
+                    busDev.removeSchedule(process);
                     break;
                 case 6:
                     System.out.println(ANSI_YELLOW + "View All Customers Page"+ANSI_RESET);
@@ -279,7 +364,6 @@ public class CRMSystem{
                     System.out.println(ANSI_YELLOW + "Find Product Page"+ANSI_RESET);
                     System.out.print("Enter ID : ");
                     id = input.next();
-                    pro = Company.getProduct(id);
                     busDev.findProduct(id);
                     break;
                 case 8:
@@ -404,7 +488,19 @@ public class CRMSystem{
         System.out.println(ANSI_RED +"System Closed"+ ANSI_RESET);
         return;
     }
-    public boolean singUp(String name, String surName, String id, String phoneNumber) throws SQLException {
+
+    /**
+     * Sing up boolean.
+     *
+     * @param name        the name
+     * @param surName     the sur name
+     * @param id          the id
+     * @param password the phone number
+     * @return the boolean
+     * @throws SQLException the sql exception
+     */
+    public boolean singUp(String name, String surName, String id, String password) throws SQLException {
+/*
         Scanner input = new Scanner(System.in);
         //String name,password,num,mail;
 
@@ -416,7 +512,9 @@ public class CRMSystem{
         id = input.next();
         System.out.print("Enter Phone Number : ");
         phoneNumber = input.next();
-        company.signUp(new User(name,surName,id,phoneNumber));
+
+ */
+        company.signUp(new User(name,surName,id,password));
 
         return true;
     }
