@@ -562,6 +562,16 @@ public class DatabaseCRM {
                 System.out.println("A product was deleted successfully!");
             }
         }
+	    
+	public static boolean createProduct(Product product){
+		
+		PreparedStatement statement = connection.prepareStatement("INSERT INTO cecvsYhcHb.products values(?,?,?);");
+		statement.setString(1, product.getID());
+		statement.setString(2, product.getName());
+		statement.setString(3, product.getCategory());
+		int res = statement.executeUpdate();
+    		return (res > 0 ) ? true : false; 
+	}
 
         public static ArrayList<String> getAllProductId() throws SQLException {
             ArrayList<String> list = new ArrayList<>();
