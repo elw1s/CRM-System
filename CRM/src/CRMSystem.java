@@ -3,15 +3,13 @@ package src;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
  * The type Crm system.
  */
 public class CRMSystem{
-    /*Bu objeyi (company) kullanarak kullanıcılara, ürünlere erişebilirsiniz. Bu class bi nevi driver olacak.
-     * User kendi yazacağı mainde bu classın objesini oluşturacak. Bütün işlemler bu class üzerinden gerçekleşecek.
-     * */
 
     /**
      * The constant ANSI_RESET.
@@ -105,24 +103,38 @@ public class CRMSystem{
         Scanner input = new Scanner(System.in);
         String id = "null";
         User user = null;
-        while (user == null) {
-            System.out.print(ANSI_PURPLE + "Enter Id : " + ANSI_RESET);
-            id = input.next();
-            user = login(id);
+        while(true){
+            System.out.println("1- Login");
+            System.out.println("2- Sign up");
+            int choice = input.nextInt();
+            switch ( choice){
+                case 1:
+                    while (user == null) {
+                        System.out.print(ANSI_PURPLE + "Enter Id : " + ANSI_RESET);
+                        id = input.next();
+                        user = login(id);
 
-            if(user == null) {
-                System.out.println(ANSI_RED + "There is no user with this ID or Password is wrong" + ANSI_RESET);
-                System.out.println(ANSI_RED + "Please Enter Again" + ANSI_RESET);
+                        if (user == null) {
+                            System.out.println(ANSI_RED + "There is no user with this ID or Password is wrong" + ANSI_RESET);
+                            System.out.println(ANSI_RED + "Please Enter Again" + ANSI_RESET);
+                        }
+
+                    }
+                    if(user != null) {
+                        if (id.charAt(0) == 'A')
+                            adminMenu((Admin) user);
+                        else if (id.charAt(0) == 'B')
+                            developerMenu((BusinessDeveloper) user);
+                        else if (id.charAt(0) == 'C')
+                            customerMenu((Customer) user);
+                    }
+                    break;
+                case 2:
+                    singUp();
+                    break;
+                default:
+                    System.err.println("Invalid selection.");
             }
-
-        }
-        if(user != null) {
-            if (id.charAt(0) == 'A')
-                adminMenu((Admin) user);
-            else if (id.charAt(0) == 'B')
-                developerMenu((BusinessDeveloper) user);
-            else if (id.charAt(0) == 'C')
-                customerMenu((Customer) user);
         }
 
     }
@@ -489,34 +501,29 @@ public class CRMSystem{
         return;
     }
 
-    /**
-     * Sing up boolean.
-     *
-     * @param name        the name
-     * @param surName     the sur name
-     * @param id          the id
-     * @param password the phone number
-     * @return the boolean
-     * @throws SQLException the sql exception
+    /***
+     * Signs up a customer by taking input from him/her
+     * @return true when the sign up operation is completed
+     * @throws SQLException
      */
-    public boolean singUp(String name, String surName, String id, String password) throws SQLException {
-/*
-        Scanner input = new Scanner(System.in);
-        //String name,password,num,mail;
-
-        System.out.print("Enter Name : ");
-        name = input.next();
-        System.out.print("Enter Surname : ");
-        surName = input.next();
-        System.out.print("Enter Id : ");
-        id = input.next();
-        System.out.print("Enter Phone Number : ");
-        phoneNumber = input.next();
-
- */
-        company.signUp(new User(name,surName,id,password));
-
-        return true;
+    public boolean singUp() throws SQLException {
+            Scanner input = new Scanner(System.in);
+            String name,surName,id = "C1",password,email,phoneNum;
+            Random rand = new Random();
+            System.out.print("Enter Name : ");
+            name = input.next();
+            System.out.print("Enter Surname : ");
+            surName = input.next();
+            System.out.print("Enter Password : ");
+            password = input.next();
+            System.out.println("Enter Email : ");
+            email = input.next();
+            System.out.println("Enter Phone number : ");
+            phoneNum = input.next();
+            id = "C"+String.valueOf(company.getNumberOfCustomers()+1);
+            System.out.println("Your ID is " + id);
+            company.signUp(new Customer(name,surName,id,password,email,phoneNum));
+            return true;
     }
 
 }

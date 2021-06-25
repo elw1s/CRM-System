@@ -138,7 +138,6 @@ public class Company extends DatabaseCRM {
         return customer;
     }
 
-    // admin classında kullanmak için static yaptım @murat
     /**
      * Returns the admin which has the given ID
      *
@@ -146,14 +145,13 @@ public class Company extends DatabaseCRM {
      * @return Admin object with the given ID
      * @throws NoSuchElementException
      */
-    public static Admin getAdmin(String ID) throws NoSuchElementException {
+    public Admin getAdmin(String ID) throws NoSuchElementException {
         for (Admin value : admin) {
             if (value.getID().equals(ID)) return value;
         }
         throw new NoSuchElementException("There is no admin with the given ID");
     }
 
-    // admin classında kullanmak için static yaptım @murat
     /**
      * Returns the business developer which has the given ID
      *
@@ -161,14 +159,13 @@ public class Company extends DatabaseCRM {
      * @return BusinessDev object with the given ID
      * @throws NoSuchElementException
      */
-    public static BusinessDeveloper getBusinessDev(String ID) throws NoSuchElementException {
+    public BusinessDeveloper getBusinessDev(String ID) throws NoSuchElementException {
         for (BusinessDeveloper businessDeveloper : businessDev) {
             if (businessDeveloper.getID().equals(ID)) return businessDeveloper;
         }
         throw new NoSuchElementException("There is no business developer with the given ID");
     }
 
-    // admin classında kullanmak için static yaptım @murat
     /**
      * Returns the customer which has the given ID
      *
@@ -176,7 +173,7 @@ public class Company extends DatabaseCRM {
      * @return Customer object with the given ID
      * @throws NoSuchElementException
      */
-    public static Customer getCustomer(String ID) throws NoSuchElementException {
+    public Customer getCustomer(String ID) throws NoSuchElementException {
         SkipList.SkipListIter iter = (SkipList.SkipListIter) customer.iterator();
         while (iter.hasNext()) {
             Customer temp = (Customer) iter.next();
@@ -211,16 +208,16 @@ public class Company extends DatabaseCRM {
     }
 
     public void signUp(User user) throws SQLException {
-        if(user.getClass().toString().equals("Admin")){
+        if(user.getClass().toString().equals("class src.Admin")){
             admin.add(new Admin(user.getName(),user.getSurName(), user.getID(), user.getPassword()));
             DatabaseCRM.UserDB.createUserInDB(user);
         }
-        else if(user.getClass().toString().equals("BusinessDeveloper"))
+        else if(user.getClass().toString().equals("class src.BusinessDeveloper"))
         {
             businessDev.add(new BusinessDeveloper(user.getName(),user.getSurName(), user.getID(), user.getPassword()));
             DatabaseCRM.UserDB.createUserInDB(user);
         }
-        else if(user.getClass().toString().equals("Customer")){
+        else if(user.getClass().toString().equals("class src.Customer")){
             customer.add(new Customer(user.getName(),user.getSurName(), user.getID(), user.getPassword()));
             DatabaseCRM.UserDB.createCustomerInDB((Customer) user);
         }
@@ -403,6 +400,13 @@ public class Company extends DatabaseCRM {
         //Database içerisine message kaydetme yok
     }
 
+    /***
+     * Returns the number of the customers
+     * @return Returns the number of customers
+     */
+    public int getNumberOfCustomers(){
+        return customer.size();
+    }
 
 
 }
