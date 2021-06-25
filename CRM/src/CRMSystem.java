@@ -1,8 +1,6 @@
 package src;
 
 import java.sql.SQLException;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Scanner;
 
 public class CRMSystem{
@@ -60,11 +58,11 @@ public class CRMSystem{
         }
         return null;
     }
-    public void showMenu(User user) throws Exception {
+    public void showMenu() throws Exception {
         System.out.println(ANSI_BLUE +"Welcome To CRM System" + ANSI_RESET);
         Scanner input = new Scanner(System.in);
         String id = "null";
-        user = null;
+        User user = null;
         while (user == null) {
             System.out.print(ANSI_PURPLE + "Enter Id : " + ANSI_RESET);
             id = input.next();
@@ -103,9 +101,9 @@ public class CRMSystem{
             System.out.println("9 - Remove Schedule");
             System.out.println("10 - Manage Customer Feedbacks");
             System.out.println("11 - View All Users");
-            System.out.println("12 - Find Product \n\n");
+            System.out.println("12 - Find Product \n");
             System.out.println("13 - Set User Name");
-            System.out.println("14 - Set User Surname \n\n");
+            System.out.println("14 - Set User Surname \n");
             System.out.println("0 - Logout");
             System.out.println("-1 - Quit");
 
@@ -155,10 +153,8 @@ public class CRMSystem{
                     name = input.next();
                     System.out.print("Enter Id : ");
                     ID = input.next();
-                    System.out.print("Enter ID : ");
+                    System.out.print("Enter Category : ");
                     String category = input.next();
-                    System.out.print("Enter Password : ");
-                    password = input.next();
                     admin.addProduct(new Product(name,ID,category));
                     break;
                 case 6:
@@ -167,36 +163,17 @@ public class CRMSystem{
                     id = input.next();
                     admin.removeProduct(id);
                     break;
-                // düzenlendi @murat
                 case 7:
                     System.out.println(ANSI_YELLOW + "Manage Schedule Page"+ANSI_RESET);
-                    admin.printsSchedule();
-                    System.out.println("Enter the process you want to edit(as integer): ");
-                    int num = input.nextInt();
-                    System.out.println("Enter new year value: ");
-                    int year = input.nextInt();
-                    admin.manageSchedule(num, year);
+                    admin.manageSchedule();
                     break;
-                // düzenlendi @murat
                 case 8:
                     System.out.println(ANSI_YELLOW + "Add Schedule Page"+ANSI_RESET);
-                    System.out.println("Enter Process: ");
-                    String process = input.next();
-                    Date date = new Date();
-                    if (process != null){
-                        Schedule schedule = new Schedule(date, process);
-                        admin.addSchedule(schedule);
-                    }
-                    else
-                        System.out.println("Error!");
+                    admin.addSchedule();
                     break;
-                // düzenlendi @murat
                 case 9:
                     System.out.println(ANSI_YELLOW + "Remove Schedule Page"+ANSI_RESET);
-                    admin.printsSchedule();
-                    System.out.println("Enter the process you want to delete (as integer): ");
-                    int num1 = input.nextInt();
-                    admin.removeSchedule(num1);
+                    admin.removeSchedule();
                     break;
                 case 10:
                     System.out.println(ANSI_YELLOW + "Manage Customer Feedbacks Page"+ANSI_RESET);
@@ -227,7 +204,7 @@ public class CRMSystem{
                     admin.setUserName(id,name);
                     break;
                 case 0:
-                    showMenu(admin);
+                    showMenu();
                     break;
                 case -1:
                     System.out.println(ANSI_RED + "System is closing..."+ANSI_RESET);
@@ -339,7 +316,7 @@ public class CRMSystem{
                     busDev.setCustomerPhoneNumber(id, name);
                     break;
                 case 0:
-                    showMenu(busDev);
+                    showMenu();
                     break;
                 case -1:
                     System.out.println(ANSI_RED +"System is closing..." +ANSI_RESET);
@@ -413,7 +390,7 @@ public class CRMSystem{
                     customer.setPassword(password);
                     break;
                 case 0:
-                    showMenu(customer);
+                    showMenu();
                     break;
                 case -1:
                     System.out.println(ANSI_RED +"System is closing..."+ ANSI_RESET);
